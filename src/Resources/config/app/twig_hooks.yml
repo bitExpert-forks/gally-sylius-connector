@@ -1,5 +1,35 @@
 sylius_twig_hooks:
     hooks:
+        'sylius_shop.base.header.content':
+            search:
+                template: '@GallySyliusPlugin/shop/shared/components/header/search/hook.html.twig'
+                priority: 250
+
+        'sylius_shop.product.search.content':
+            breadcrumbs:
+                template: '@GallySyliusPlugin/shop/product/search/content/breadcrumbs.html.twig'
+                component: ~
+                props: ~
+                priority: 120
+
+        'sylius_shop.product.search.content.body.main':
+            header:
+                template: '@GallySyliusPlugin/shop/product/search/content/body/main/header.html.twig'
+                component: ~
+                props: ~
+                priority: 350
+
+        'sylius_shop.product.search.content.body.main.filters':
+            search:
+                template: '@GallySyliusPlugin/shop/product/search/content/body/main/filters/search.html.twig'
+
+        'sylius_shop.product.search.content.body.sidebar':
+            taxonomy:
+                enabled: false
+            gally_filters:
+                template: '@GallySyliusPlugin/shop/product/search/content/body/sidebar/filters.html.twig'
+
+
         'gally_admin.gally.index':
             sidebar:
                 template: '@SyliusAdmin/shared/crud/common/sidebar.html.twig'

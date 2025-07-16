@@ -24,6 +24,18 @@ sylius_grid:
       filters:
         gally:
           type: gally_dynamic_filter
+    gally_shop_product_search:
+      driver:
+        name: gally/search
+        options:
+          class: "%sylius.model.product.class%"
+          repository:
+            method: createListQueryBuilder
+            arguments:
+              locale: "expr:service('sylius.context.locale').getLocaleCode()"
+      filters:
+        gally:
+          type: gally_dynamic_filter
   templates:
     filter:
       gally_dynamic_filter: '@GallySyliusPlugin/shop/grid/filter/gally_dynamic_filter.html.twig'

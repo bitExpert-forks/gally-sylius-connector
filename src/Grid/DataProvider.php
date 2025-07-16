@@ -35,7 +35,7 @@ final class DataProvider implements DataProviderInterface
 
     public function getData(Grid $grid, Parameters $parameters)
     {
-        if ('sylius_shop_product' === $grid->getCode()) {
+        if ('sylius_shop_product' === $grid->getCode() || 'gally_shop_product_search' === $grid->getCode()) {
             $channel = $this->channelContext->getChannel();
             if (($channel instanceof GallyChannelInterface) && $channel->getGallyActive()) {
                 $dataSource = $this->dataSourceProvider->getDataSource($grid, $parameters);

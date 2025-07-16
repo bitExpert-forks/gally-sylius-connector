@@ -1,0 +1,36 @@
+{% import "@SyliusShop/shared/macro/money.html.twig" as money %}
+{% if products|length %}
+    <div class="row">
+        <h6 class="mb-2">{{ 'sylius.ac.products_title'|trans() }}</h6>
+        {% for product in products %}
+            {% set product_name = product['source']['name'][0] %}
+            {% set product_sku = product['source']['sku'][0] %}
+            {% set product_price = product['source']['price'][0]['price'] %}
+            {% set image_path = product['source']['image'][0]|imagine_filter('gally_shop_product_autocomplete_thumbnail') %}
+
+            <div class="col-md-6 mb-3">
+                <img class="rounded float-start me-2" src="{{ image_path }}" alt="{{ 'sylius.ui.product'|trans }} {{ product_name }} {{ 'sylius.ui.image'|trans }}" />
+                <p class="mb-1"><strong>{{ product_name }}</strong></p>
+                <p class=""><small class="text-body-secondary">{{ money.convertAndFormat(100 * product_price) }}</small></p>
+            </div>
+        {% endfor %}
+        <small class="text-body-secondary"><a href="{{ view_all_results_link }}">{{ 'sylius.ac.view_all_search_results'|trans() }}</a></small>
+    </div>
+{% endif %}
+{% if categories|length %}
+    <hr>
+    <div class="row">
+        <h6 class="mb-2">{{ 'sylius.ac.categories_title'|trans() }}</h6>
+        {% for categorie in categories %}
+            {% set categorie_name = categorie['name'] %}
+            {% set image_path = asset('build/shop/images/200x200.png', 'shop') %}
+
+            <div class="col-md-6 mb-3">
+{#
+                <img class="rounded float-start me-2" src="{{ image_path }}" alt="{{ 'sylius.ui.category'|trans }} {{ categorie_name }} {{ 'sylius.ui.image'|trans }}" />
+#}
+                <p class="mb-1"><strong>&bull;&nbsp;{{ categorie_name }}</strong></p>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

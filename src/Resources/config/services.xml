@@ -51,6 +51,14 @@
             <tag name="controller.service_arguments" />
         </service>
 
+        <service id="Gally\SyliusPlugin\Controller\Shop\SearchController">
+            <argument type="service" id="Gally\SyliusPlugin\Search\Finder" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="controller.service_arguments" />
+        </service>
+
         <service id="Gally\SyliusPlugin\Form\Extension\ChannelTypeExtension">
             <tag name="form.type_extension"/>
         </service>

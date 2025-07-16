@@ -16,7 +16,9 @@ namespace Gally\SyliusPlugin\Indexer\Provider;
 
 use Gally\Sdk\Entity\Catalog;
 use Gally\Sdk\Entity\LocalizedCatalog;
+use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
@@ -30,6 +32,8 @@ class CatalogProvider implements ProviderInterface
 
     public function __construct(
         private RepositoryInterface $channelRepository,
+        private ChannelContextInterface $channelContext,
+        private LocaleContextInterface $localeContext,
     ) {
     }
 
@@ -66,5 +70,17 @@ class CatalogProvider implements ProviderInterface
             str_replace('-', '_', (string) $locale->getCode()),
             (string) $channel->getBaseCurrency()?->getCode(),
         );
+    }
+
+    public function getLocalizedCatalog(): LocalizedCatalog
+    {
+        /** @var ChannelInterface $channel */
+        $channel = $this->channelContext->getChannel();
+        /** @var LocaleInterface $locale */
+        $locale = $channel->getLocales()->filter(function (LocaleInterface $locale) {
+            return $locale->getCode() === $this->localeContext->getLocaleCode();
+        })->first();
+
+        return $this->buildLocalizedCatalog($channel, $locale);
     }
 }

@@ -5,3 +5,34 @@ gally_filter_view_more_ajax:
     defaults:
         _controller: Gally\SyliusPlugin\Controller\Filter::viewMore
         _format: json
+
+gally_search_form:
+    path: /search
+    methods: [ GET ]
+    defaults:
+        _controller: Gally\SyliusPlugin\Controller\Shop\SearchController::renderForm
+
+gally_search_post_result:
+    path: /search-results
+    methods: [ POST ]
+    defaults:
+        _controller: Gally\SyliusPlugin\Controller\Shop\SearchController::getResults
+
+gally_search_result_page:
+    path: /search-results
+    methods: [ GET ]
+    defaults:
+        _controller: sylius.controller.product::indexAction
+        _sylius:
+            template: "@GallySyliusPlugin/shop/product/search.html.twig"
+            grid: gally_shop_product_search
+
+gally_search_result_preview_ajax:
+    path: /search-preview
+    methods: [ POST ]
+    defaults:
+        _controller: Gally\SyliusPlugin\Controller\Shop\SearchController::getPreview
+        _format: json
+        _sylius:
+            template: "@SyliusShop/product/index.html.twig"
+            grid: gally_shop_product_search

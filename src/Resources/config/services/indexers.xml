@@ -5,6 +5,8 @@
     <services>
         <service id="Gally\SyliusPlugin\Indexer\Provider\CatalogProvider">
             <argument type="service" id="sylius.repository.channel" />
+            <argument type="service" id="sylius.context.channel" />
+            <argument type="service" id="sylius.context.locale" />
             <tag name="gally.dataprovider" entity="catalog"/>
         </service>
         <service id="Gally\SyliusPlugin\Indexer\Provider\SourceFieldProvider">

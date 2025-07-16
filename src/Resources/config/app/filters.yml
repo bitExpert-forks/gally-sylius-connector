@@ -1,0 +1,7 @@
+liip_imagine:
+    filter_sets:
+        gally_shop_product_autocomplete_thumbnail:
+            format: webp
+            quality: 80
+            filters:
+                thumbnail: { size: [80, 100], mode: outbound }
