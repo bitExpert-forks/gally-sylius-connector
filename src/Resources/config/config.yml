@@ -1,3 +1,4 @@
 imports:
   - { resource: "app/twig_hooks.yml" }
   - { resource: "app/grid.yml" }
+  - { resource: "app/filters.yml" }

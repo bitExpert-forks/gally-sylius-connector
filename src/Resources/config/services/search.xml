@@ -5,6 +5,19 @@
     <services>
         <service id="Gally\SyliusPlugin\Search\FilterConverter" />
 
+        <service id="Gally\SyliusPlugin\Search\Finder" >
+            <argument type="service" id="Gally\Sdk\Service\SearchManager" />
+            <argument type="service" id="Gally\SyliusPlugin\Indexer\Provider\CatalogProvider" />
+        </service>
+
+        <service id="Gally\SyliusPlugin\Grid\Gally\Search\SearchDriver">
+            <argument type="service" id="Gally\Sdk\Service\SearchManager" />
+            <argument type="service" id="Gally\SyliusPlugin\Indexer\Provider\CatalogProvider" />
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="doctrine" />
+            <tag name="sylius.grid_driver" alias="gally/search" />
+        </service>
+
         <service id="Gally\SyliusPlugin\Grid\Gally\Driver">
             <argument type="service" id="doctrine" />
             <argument type="service" id="Gally\SyliusPlugin\Indexer\Provider\CatalogProvider" />

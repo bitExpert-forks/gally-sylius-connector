@@ -1,0 +1,22 @@
+<div class="col" id="searchFormContainer" data-preview-url="{{ path('gally_search_result_preview_ajax') }}">
+    {{ form_start(searchForm) }}
+    <div class="input-group mb-1 accordion-header">
+        {{ form_widget(searchForm.query) }}
+        <button type="submit" id="search" class="btn btn-outline-secondary btn-sm collapsed" data-bs-toggle="collapse" data-bs-target="#collapsedSearchResults" aria-expanded="false" aria-controls="collapsedSearchResults">
+            {{ ux_icon('tabler:search') }}
+        </button>
+
+    </div>
+    <div id="collapsedSearchResults" class="collapse" style="width: 630px; position: absolute; z-index: 1; margin-left: -100px">
+        <div class="card p-3">
+            <div class="loading-results text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div class="results d-none">
+            </div>
+        </div>
+    </div>
+    {{ form_end(searchForm) }}
+</div>
