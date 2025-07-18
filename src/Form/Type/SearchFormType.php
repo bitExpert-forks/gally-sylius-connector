@@ -18,7 +18,7 @@ class SearchFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'form.header.query.placeholder',
+                    'placeholder' => 'gally_sylius.form.header.query.placeholder',
                     'autocomplete' => 'off',
                     'aria-label' => 'form.header.query.label',
                     'aria-describedby' => 'collapsedSearchResults' // This should be the ID of the button below

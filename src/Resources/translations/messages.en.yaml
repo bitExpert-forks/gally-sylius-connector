@@ -19,8 +19,25 @@ gally_sylius:
         direction:
             asc: ascending
             desc: descending
+
+    breadcrumb:
+      search_results: Search results
+    search_results:
+      title: Search results
+      query: Your query
+
   form:
     active: Enable Gally
     product_index_batch_size: Product Indexing Batch Size
     category_index_batch_size: Category Indexing Batch Size
     checkSSL: Validate the SSL certificate of gally domain
+
+    header:
+      query:
+        placeholder: Search for products
+        label: Search
+
+  autocomplete:
+    products_title: Products
+    view_all_search_results: View all search results
+    categories_title: Categories

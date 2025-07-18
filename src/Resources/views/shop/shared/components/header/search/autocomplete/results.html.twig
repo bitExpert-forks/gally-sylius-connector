@@ -1,7 +1,7 @@
 {% import "@SyliusShop/shared/macro/money.html.twig" as money %}
 {% if products|length %}
     <div class="row">
-        <h6 class="mb-2">{{ 'sylius.ac.products_title'|trans() }}</h6>
+        <h6 class="mb-2">{{ 'gally_sylius.autocomplete.products_title'|trans() }}</h6>
         {% for product in products %}
             {% set product_name = product['source']['name'][0] %}
             {% set product_sku = product['source']['sku'][0] %}
@@ -14,13 +14,13 @@
                 <p class=""><small class="text-body-secondary">{{ money.convertAndFormat(100 * product_price) }}</small></p>
             </div>
         {% endfor %}
-        <small class="text-body-secondary"><a href="{{ view_all_results_link }}">{{ 'sylius.ac.view_all_search_results'|trans() }}</a></small>
+        <small class="text-body-secondary"><a href="{{ view_all_results_link }}">{{ 'gally_sylius.autocomplete.view_all_search_results'|trans() }}</a></small>
     </div>
 {% endif %}
 {% if categories|length %}
     <hr>
     <div class="row">
-        <h6 class="mb-2">{{ 'sylius.ac.categories_title'|trans() }}</h6>
+        <h6 class="mb-2">{{ 'gally_sylius.autocomplete.categories_title'|trans() }}</h6>
         {% for categorie in categories %}
             {% set categorie_name = categorie['name'] %}
             {% set image_path = asset('build/shop/images/200x200.png', 'shop') %}
