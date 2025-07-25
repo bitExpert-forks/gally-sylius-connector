@@ -31,6 +31,9 @@ gally_sylius:
     product_index_batch_size: Product Indexing Batch Size
     category_index_batch_size: Category Indexing Batch Size
     checkSSL: Validate the SSL certificate of gally domain
+    gally_autocomplete_product_max_size: Autocomplete Product Max Size
+    gally_autocomplete_category_max_size: Autocomplete Category Max Size
+    gally_autocomplete_attribute_max_size: Autocomplete Attribute Max Size
 
     header:
       query:
@@ -41,3 +44,4 @@ gally_sylius:
     products_title: Products
     view_all_search_results: View all search results
     categories_title: Categories
+    attributes_title: Attributes

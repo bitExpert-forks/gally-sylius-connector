@@ -10,7 +10,7 @@ gally_search_form:
     path: /search
     methods: [ GET ]
     defaults:
-        _controller: Gally\SyliusPlugin\Controller\Shop\SearchController::renderForm
+        _controller: Gally\SyliusPlugin\Controller\Shop\SearchController::getForm
 
 gally_search_post_result:
     path: /search-results

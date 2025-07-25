@@ -55,19 +55,24 @@ class SearchAdapter implements AdapterInterface
 
     public function getSlice(int $offset, int $length): iterable
     {
-        $search = $this->parameters->get('query', $this->parameters->get('criteria', [])['search']['value'] ?? '');
+        /** @var array $criteria */
+        $criteria = $this->parameters->get('criteria', []);
+        /** @var string $search */
+        $search = $this->parameters->get('query', $criteria['search']['value'] ?? '');
         /** @var array<string> $sorting */
         $sorting = $this->parameters->get('sorting', []);
+        /** @var string|int $page */
+        $page = $this->parameters->get('page', 1);
         $sortField = array_key_first($sorting);
         $sortDirection = $sorting[$sortField] ?? null;
-        $page = (int) $this->parameters->get('page', 1);
+        $page = (int) $page;
 
         $request = new Request(
             $this->catalogProvider->getLocalizedCatalog(),
             new Metadata('product'),
             false,  // @todo: parameterize
             ['sku', 'source'],
-            (int) $page,
+            $page,
             $length,
             null,
             $search,

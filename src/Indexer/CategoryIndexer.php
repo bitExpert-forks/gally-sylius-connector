@@ -128,6 +128,7 @@ class CategoryIndexer extends AbstractIndexer
             'level' => $taxon->getLevel() + 1 - $menuTaxon->getLevel(),
             'path' => $this->pathCache[$taxon->getCode()],
             'name' => $translation->getName(),
+            'slug' => $translation->getSlug(),
         ];
     }
 }

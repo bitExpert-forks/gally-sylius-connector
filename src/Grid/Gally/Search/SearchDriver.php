@@ -39,7 +39,7 @@ final class SearchDriver implements DriverInterface
 
     public function getDataSource(array $configuration, Parameters $parameters): DataSourceInterface
     {
-        if (!array_key_exists('class', $configuration)) {
+        if (!\array_key_exists('class', $configuration)) {
             throw new \InvalidArgumentException('"class" must be configured.');
         }
 
@@ -47,11 +47,16 @@ final class SearchDriver implements DriverInterface
         $manager = $this->managerRegistry->getManagerForClass($configuration['class']);
 
         /** @var ProductRepositoryInterface $repository */
-        $repository = $manager->getRepository($configuration['class']);
+        $repository = $manager->getRepository($configuration['class']); // @phpstan-ignore-line
 
         $method = $configuration['repository']['method'];
         $arguments = isset($configuration['repository']['arguments']) ? array_values($configuration['repository']['arguments']) : [];
 
-        return new SearchDataSource($repository->$method(...$arguments), $this->searchManager, $this->catalogProvider, $this->eventDispatcher);
+        return new SearchDataSource(
+            $repository->{$method}(...$arguments),
+            $this->searchManager,
+            $this->catalogProvider,
+            $this->eventDispatcher
+        );
     }
 }
