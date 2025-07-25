@@ -33,7 +33,7 @@ class SourceFieldProvider implements ProviderInterface
     /** @var LocalizedCatalog[] */
     private array $localizedCatalogs = [];
 
-    /** @var \Gally\Sdk\Entity\Metadata[] */
+    /** @var Metadata[] */
     private array $metadataCache = [];
 
     public function __construct(
@@ -58,6 +58,22 @@ class SourceFieldProvider implements ProviderInterface
         /** @var ProductOptionInterface $productOption */
         foreach ($this->productOptionRepository->findAll() as $productOption) {
             yield $this->buildSourceField('product', $productOption, 'select');
+        }
+
+        $staticSourceField = [
+            'product' => ['slug' => 'text'],
+            'category' => ['slug' => 'text'],
+        ];
+
+        // Static source field
+        foreach ($staticSourceField as $entity => $fields) {
+            foreach ($fields as $code => $type) {
+                if (!\array_key_exists($entity, $this->metadataCache)) {
+                    $this->metadataCache[$entity] = new Metadata($entity);
+                }
+
+                yield new SourceField($this->metadataCache[$entity], $code, $this->getGallyType($type), $code, []);
+            }
         }
     }
 

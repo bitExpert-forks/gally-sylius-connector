@@ -34,6 +34,15 @@ final class ChannelTypeExtension extends AbstractTypeExtension
             ])
             ->add('gallyCategoryIndexBatchSize', IntegerType::class, [
                 'label' => 'gally_sylius.form.category_index_batch_size',
+            ])
+            ->add('gallyAutocompleteProductMaxSize', IntegerType::class, [
+                'label' => 'gally_sylius.form.gally_autocomplete_product_max_size',
+            ])
+            ->add('gallyAutocompleteCategoryMaxSize', IntegerType::class, [
+                'label' => 'gally_sylius.form.gally_autocomplete_category_max_size',
+            ])
+            ->add('gallyAutocompleteAttributeMaxSize', IntegerType::class, [
+                'label' => 'gally_sylius.form.gally_autocomplete_attribute_max_size',
             ]);
     }
 

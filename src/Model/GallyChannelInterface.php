@@ -29,4 +29,16 @@ interface GallyChannelInterface extends ChannelInterface
     public function getGallyCategoryIndexBatchSize(): int;
 
     public function setGallyCategoryIndexBatchSize(int $gallyCategoryIndexBatchSize): void;
+
+    public function getGallyAutocompleteProductMaxSize(): int;
+
+    public function setGallyAutocompleteProductMaxSize(int $gallyAutocompleteProductMaxSize): void;
+
+    public function getGallyAutocompleteCategoryMaxSize(): int;
+
+    public function setGallyAutocompleteCategoryMaxSize(int $gallyAutocompleteCategoryMaxSize): void;
+
+    public function getGallyAutocompleteAttributeMaxSize(): int;
+
+    public function setGallyAutocompleteAttributeMaxSize(int $gallyAutocompleteAttributeMaxSize): void;
 }

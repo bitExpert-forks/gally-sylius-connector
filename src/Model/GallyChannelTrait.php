@@ -28,6 +28,15 @@ trait GallyChannelTrait
     #[ORM\Column(name: 'gally_category_index_batch_size', type: 'integer')]
     protected $gallyCategoryIndexBatchSize = 50;
 
+    #[ORM\Column(name: 'gally_autocomplete_product_max_size', type: 'integer')]
+    protected $gallyAutocompleteProductMaxSize = 6;
+
+    #[ORM\Column(name: 'gally_autocomplete_category_max_size', type: 'integer')]
+    protected $gallyAutocompleteCategoryMaxSize = 6;
+
+    #[ORM\Column(name: 'gally_autocomplete_attribute_max_size', type: 'integer')]
+    protected $gallyAutocompleteAttributeMaxSize = 6;
+
     public function getGallyActive(): bool
     {
         return $this->gallyActive;
@@ -56,5 +65,35 @@ trait GallyChannelTrait
     public function setGallyCategoryIndexBatchSize(int $gallyCategoryIndexBatchSize): void
     {
         $this->gallyCategoryIndexBatchSize = $gallyCategoryIndexBatchSize;
+    }
+
+    public function getGallyAutocompleteProductMaxSize(): int
+    {
+        return $this->gallyAutocompleteProductMaxSize;
+    }
+
+    public function setGallyAutocompleteProductMaxSize(int $gallyAutocompleteProductMaxSize): void
+    {
+        $this->gallyAutocompleteProductMaxSize = $gallyAutocompleteProductMaxSize;
+    }
+
+    public function getGallyAutocompleteCategoryMaxSize(): int
+    {
+        return $this->gallyAutocompleteCategoryMaxSize;
+    }
+
+    public function setGallyAutocompleteCategoryMaxSize(int $gallyAutocompleteCategoryMaxSize): void
+    {
+        $this->gallyAutocompleteCategoryMaxSize = $gallyAutocompleteCategoryMaxSize;
+    }
+
+    public function getGallyAutocompleteAttributeMaxSize(): int
+    {
+        return $this->gallyAutocompleteAttributeMaxSize;
+    }
+
+    public function setGallyAutocompleteAttributeMaxSize(int $gallyAutocompleteAttributeMaxSize): void
+    {
+        $this->gallyAutocompleteAttributeMaxSize = $gallyAutocompleteAttributeMaxSize;
     }
 }

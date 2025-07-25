@@ -1,36 +1,77 @@
 {% import "@SyliusShop/shared/macro/money.html.twig" as money %}
-{% if products|length %}
-    <div class="row">
-        <h6 class="mb-2">{{ 'gally_sylius.autocomplete.products_title'|trans() }}</h6>
-        {% for product in products %}
-            {% set product_name = product['source']['name'][0] %}
-            {% set product_sku = product['source']['sku'][0] %}
-            {% set product_price = product['source']['price'][0]['price'] %}
-            {% set image_path = product['source']['image'][0]|imagine_filter('gally_shop_product_autocomplete_thumbnail') %}
+<div class="row">
+    {% if categories|length or attributes|length %}
+        {% if products|length %}
+        <div class="col-md-3 pe-2 border-end">
+        {% else %}
+        <div class="col-md-12 pe-2">
+        {% endif %}
 
-            <div class="col-md-6 mb-3">
-                <img class="rounded float-start me-2" src="{{ image_path }}" alt="{{ 'sylius.ui.product'|trans }} {{ product_name }} {{ 'sylius.ui.image'|trans }}" />
-                <p class="mb-1"><strong>{{ product_name }}</strong></p>
-                <p class=""><small class="text-body-secondary">{{ money.convertAndFormat(100 * product_price) }}</small></p>
-            </div>
-        {% endfor %}
-        <small class="text-body-secondary"><a href="{{ view_all_results_link }}">{{ 'gally_sylius.autocomplete.view_all_search_results'|trans() }}</a></small>
-    </div>
-{% endif %}
-{% if categories|length %}
-    <hr>
-    <div class="row">
-        <h6 class="mb-2">{{ 'gally_sylius.autocomplete.categories_title'|trans() }}</h6>
-        {% for categorie in categories %}
-            {% set categorie_name = categorie['name'] %}
-            {% set image_path = asset('build/shop/images/200x200.png', 'shop') %}
+        {% if categories|length %}
+            <h6 class="mb-3">{{ 'gally_sylius.autocomplete.categories_title'|trans }}</h6>
+            {% for categorie in categories %}
+                {% set categorie_name = categorie['name'] %}
+                {% set categorie_path = categorie['path'] %}
+                {% set categorie_slug = categorie['slug'] %}
 
-            <div class="col-md-6 mb-3">
-{#
-                <img class="rounded float-start me-2" src="{{ image_path }}" alt="{{ 'sylius.ui.category'|trans }} {{ categorie_name }} {{ 'sylius.ui.image'|trans }}" />
-#}
-                <p class="mb-1"><strong>&bull;&nbsp;{{ categorie_name }}</strong></p>
-            </div>
-        {% endfor %}
+                <a href="{{ path('sylius_shop_product_index', {'slug': categorie_slug, '_locale': app.request.locale}) }}"
+                   class="link-reset mb-1 d-block">
+                    <span>{{ categorie_name }}</span><br/>
+                    <small class="text-muted">{{ categorie_path }}</small>
+                </a>
+            {% endfor %}
+        {% endif %}
+
+        {% if attributes|length %}
+            {% if categories|length %}
+            <hr/>
+            {% endif %}
+            <h6 class="mb-3">{{ 'gally_sylius.autocomplete.attributes_title'|trans }}</h6>
+            {% for attribute in attributes %}
+                {% set attribute_label = attribute['label'] %}
+                {% set attribute_code = attribute['field'] %}
+                {% set option_label = attribute['option_label'] %}
+                {% set base_url = path('gally_search_result_page', {'_locale': app.request.locale}) %}
+
+                {% set query_string =
+                    'criteria[search][value]=' ~ query|url_encode ~
+                    '&criteria[gally][' ~ attribute_code ~ '][]=' ~ option_label|url_encode
+                %}
+
+                <a href="{{ base_url ~ '?' ~ query_string }}" class="mb-1 link-reset d-block">
+                    <span class="text-muted">{{ attribute_label }}</span><br/>
+                    <small>{{ option_label }}</small>
+                </a>
+            {% endfor %}
+        {% endif %}
     </div>
-{% endif %}
+
+    <div class="col-md-9">
+    {% else %}
+    <div class="col-md-12">
+    {% endif %}
+        {% if products|length %}
+            <div class="row">
+                <h6 class="mb-3">{{ 'gally_sylius.autocomplete.products_title'|trans() }}</h6>
+                {% for product in products %}
+                    {% set product_name = product['name'] %}
+                    {% set product_sku = product['sku'] %}
+                    {% set product_slug = product['slug'] %}
+                    {% set product_price = product['price'][0]['price'] %}
+                    {% set image_path = product['image']|imagine_filter('gally_shop_product_autocomplete_thumbnail') %}
+
+                    <a href="{{ path('sylius_shop_product_show', {'slug': product_slug, '_locale': app.request.locale}) }}"
+                       class="link-reset col-md-6 mb-3 d-block">
+                        <img class="rounded float-start me-2" src="{{ image_path }}" alt="{{ 'sylius.ui.product'|trans }} {{ product_name }} {{ 'sylius.ui.image'|trans }}" />
+                        <p class="mb-1"><strong>{{ product_name }}</strong></p>
+                        <p class=""><small class="text-body-secondary">{{ money.convertAndFormat(100 * product_price) }}</small></p>
+                    </a>
+                {% endfor %}
+                <small class="text-body-secondary text-end">
+                    <a href="{{ path('gally_search_result_page', {'query': query}) }}">{{ 'gally_sylius.autocomplete.view_all_search_results'|trans() }}</a>
+                </small>
+            </div>
+        {% endif %}
+    </div>
+</div>
+

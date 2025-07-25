@@ -100,6 +100,7 @@ class ProductIndexer extends AbstractIndexer
             'sku' => [$product->getCode()],
             'name' => [$product->getTranslation($locale->getCode())->getName()],
             'description' => [$product->getTranslation($locale->getCode())->getDescription()],
+            'slug' => [$product->getTranslation($locale->getCode())->getSlug()],
             'image' => ['' !== $this->formatMedia($product) ? $this->formatMedia($product) : null],
             'price' => $this->formatPrice($variant, $channel),
             'stock' => [

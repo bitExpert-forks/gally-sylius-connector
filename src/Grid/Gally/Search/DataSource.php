@@ -50,9 +50,9 @@ final class DataSource implements DataSourceInterface
 
     public function getData(Parameters $parameters)
     {
-        /** @var string|int $page */
-        $page = (int) $parameters->get('page', 1);
-
+        /** @var int|string $page */
+        $page = $parameters->get('page', 1);
+        $page = (int) $page;
         $paginator = new PagerfantaGally(
             new SearchAdapter(
                 $this->queryBuilder,

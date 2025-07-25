@@ -58,12 +58,16 @@ class SortOptionComponent
         $criteria = $this->requestStack->getMainRequest()?->get('criteria', []);
         /** @var array<string, array<string, string>> $criteria */
         $criteria = $criteria ?? [];
-        $search = (isset($criteria['search'], $criteria['search']['value'])) ? $criteria['search']['value'] : '';
-
+        $search = $this->requestStack->getMainRequest()?->get('query')
+            ?? ((isset($criteria['search'], $criteria['search']['value'])) ? $criteria['search']['value'] : '');
         $sortData = [];
         $sortData['current_sorting_label'] = '';
         $sortData['sort_options'] = [
-            ['field' => 'category__position', 'sorting' => null, 'label' => $this->translator->trans('sylius.ui.by_position')],
+            'category__position' => [
+                'field' => 'category__position',
+                'sorting' => null,
+                'label' => $this->translator->trans('sylius.ui.by_position'),
+            ],
         ];
 
         $channel = $this->channelContext->getChannel();
@@ -76,7 +80,7 @@ class SortOptionComponent
                     $label = \array_key_exists("{$option->getCode()}.$direction", $this->translationKeys)
                         ? $this->translator->trans($this->translationKeys["{$option->getCode()}.$direction"])
                         : $option->getDefaultLabel() . ' ' . $this->translator->trans('gally_sylius.ui.sort.direction.' . $direction);
-                    $sortData['sort_options'][] = [
+                    $sortData['sort_options'][$option->getCode()] = [
                         'field' => $option->getCode(),
                         'sorting' => [$option->getCode() => $direction],
                         'label' => $label,
@@ -89,11 +93,16 @@ class SortOptionComponent
             }
 
             if ($search) {
-                $sortData['sort_options'][] = [
+                $sortData['sort_options']['category__position'] = [
                     'field' => 'category__position',
                     'sorting' => null,
                     'label' => $this->translator->trans('gally_sylius.ui.sort.relevance'),
                 ];
+            }
+
+            if (empty($sortData['current_sorting_label'])) {
+                // set first element by default
+                $sortData['current_sorting_label'] = reset($sortData['sort_options'])['label'];
             }
         } else {
             // default Sylius sorting logic (copied from @SyliusShopBundle/Product/Index/_sorting.html.twig template)
@@ -118,7 +127,10 @@ class SortOptionComponent
             }
         }
 
-        $this->sortData = $sortData;
+        $this->sortData = [
+            'current_sorting_label' => $sortData['current_sorting_label'],
+            'sort_options' => array_values($sortData['sort_options']),
+        ];
 
         return $this->sortData;
     }
