@@ -62,8 +62,8 @@ final class Filter extends AbstractController
         }
 
         $choices = [];
-        /** @var Taxon $currentTaxon */
-        $currentTaxon = $this->taxonRepository->find($request->get('taxon'));
+        /** @var ?Taxon $currentTaxon */
+        $currentTaxon = $request->get('taxon') ? $this->taxonRepository->find($request->get('taxon')) : null;
         /** @var ChannelInterface $currentChannel */
         $currentChannel = $this->channelContext->getChannel();
         $currentLocaleCode = $this->localeContext->getLocaleCode();
@@ -86,7 +86,7 @@ final class Filter extends AbstractController
             ['sku', 'source'],
             1,
             0,
-            $currentTaxon->getCode(),
+            $currentTaxon?->getCode(),
             $search,
             $gallyFilters,
         );
