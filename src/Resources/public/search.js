@@ -1,97 +1,93 @@
-const gallySearchFormHandler = function (event) {
-    const gallySearchFormContainer = document.querySelector('#searchFormContainer');
-    if (null !== gallySearchFormContainer) {
-        const gallyPreviewUrl = gallySearchFormContainer.dataset.previewUrl;
-        const gallySearchForm = gallySearchFormContainer.querySelector('form');
-        const gallySearchInput = gallySearchForm.querySelector('input');
-        const gallySearchResult = gallySearchFormContainer.querySelector('#collapsedSearchResults');
+const gallySearchFormHandler = function () {
+  const gallySearchFormContainers = document.querySelectorAll('.searchFormContainer');
 
-        let abortController = null;
-        const gallySearchResultCollapsible = bootstrap.Collapse.getOrCreateInstance(gallySearchResult, {
-            toggle: false
-        });
+  gallySearchFormContainers.forEach(container => {
+    const gallyPreviewUrl = container.dataset.previewUrl;
+    const gallySearchForm = container.querySelector('form');
+    const gallySearchInput = gallySearchForm.querySelector('input');
+    const gallySearchResult = container.querySelector('.collapsedSearchResults');
 
-        gallySearchInput.addEventListener('input', (event) => {
-            const queryText = event.target.value;
+    let abortController = null;
 
-            if (queryText.length >= 3) {
-                let formData = new FormData(gallySearchForm);
-                const plainFormData = Object.fromEntries(formData.entries());
+    gallySearchInput.addEventListener('input', (event) => {
+      const queryText = event.target.value;
 
-                let formDataArray = [];
-                for (const [key, value] of Object.entries(plainFormData)) {
-                    formDataArray.push(`${encodeURIComponent(key)}=${value}`);
-                }
-                let formDataString = formDataArray.join('&');
+      if (queryText.length >= 3) {
+        const formData = new FormData(gallySearchForm);
+        const plainFormData = Object.fromEntries(formData.entries());
+        const formDataString = new URLSearchParams(plainFormData).toString();
 
-                gallySearchResult.querySelector('.loading-results').classList.remove('d-none')
-                gallySearchResult.querySelector('.results').classList.add('d-none')
-                gallySearchResult.querySelector('.results').textContent = '';
-                gallySearchResultCollapsible.show();
+        gallySearchResult.querySelector('.loading-results').classList.remove('d-none');
+        gallySearchResult.querySelector('.results').classList.add('d-none');
+        gallySearchResult.querySelector('.results').textContent = '';
+        gallySearchResult.classList.add('show');
 
-                if (null !== abortController) {
-                    abortController.abort();
-                    abortController = null;
-                }
+        if (abortController) {
+          abortController.abort();
+        }
 
-                abortController = new AbortController();
+        abortController = new AbortController();
 
-                (async () => {
-                    const rawResponse = await fetch(gallyPreviewUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: formDataString,
-                        signal: abortController.signal
-                    }).catch((error) => {
-                        // If the request was aborted, do nothing
-                        if (error.name === 'AbortError') {
-                            return;
-                        }
+        (async () => {
+          try {
+            const rawResponse = await fetch(gallyPreviewUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: formDataString,
+              signal: abortController.signal
+            });
 
-                        // Otherwise, handle the error here or throw it back to the console
-                        throw error;
-                    });
+            const content = await rawResponse.json();
 
-                    // On aborted calls, rawResponse will be undefined
-                    if (rawResponse !== undefined) {
-                        const content = await rawResponse.json();
-                        // Do something with the results here
+            gallySearchResult.querySelector('.loading-results').classList.add('d-none');
+            gallySearchResult.querySelector('.results').classList.remove('d-none');
+            gallySearchResult.querySelector('.results').innerHTML = content.htmlResults;
 
-                        gallySearchResult.querySelector('.loading-results').classList.add('d-none');
-                        gallySearchResult.querySelector('.results').classList.remove('d-none');
-                        gallySearchResult.querySelector('.results').innerHTML = content.htmlResults;
-                    }
-                })();
+            if (!content.htmlResults) {
+              gallySearchResult.classList.remove('show');
+            }
+
+            if (gallySearchResult.querySelector('.results .products')) {
+              console.log('has product');
+              gallySearchResult.parentElement.classList.add('start-0');
+              gallySearchResult.parentElement.style.width = '100%';
             } else {
-                gallySearchResultCollapsible.hide();
+              console.log('no has product');
+              gallySearchResult.parentElement.classList.remove('start-0');
+              gallySearchResult.parentElement.style.width = 'auto';
             }
-        });
 
-        //
-        gallySearchInput.addEventListener('focus', (event) => {
-            const queryText = event.target.value;
-            if (queryText.length >= 3) {
-                // If there are already some results, display them
-                if (gallySearchResult.querySelector('.loading-results').classList.contains('d-none')) {
-                    gallySearchResultCollapsible.show();
-                }
-                // Otherwise, trigger a search
-                else {
-                    gallySearchInput.dispatchEvent(new Event('input'));
-                }
+          } catch (error) {
+            if (error.name !== 'AbortError') {
+              console.error(error);
             }
-        });
+          }
+        })();
+      } else {
+        gallySearchResult.classList.remove('show');
+      }
+    });
 
-        // Add a listener to close the searchResult container
-        document.addEventListener('click', function (event) {
-            const gallySearchResult = event.target.closest('#collapsedSearchResults');
-            if (null === gallySearchResult) {
-                gallySearchResultCollapsible.hide();
-            }
-        });
+    gallySearchInput.addEventListener('focus', (event) => {
+      const queryText = event.target.value;
+      if (queryText.length >= 3) {
+        if (gallySearchResult.querySelector('.results').innerHTML.trim() !== '') {
+          gallySearchResult.classList.add('show');
+        } else {
+          gallySearchInput.dispatchEvent(new Event('input'));
+        }
+      }
+    });
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', function (event) {
+    if (!event.target.closest('.collapsedSearchResults') && !event.target.closest('.searchFormContainer')) {
+      document.querySelectorAll('.collapsedSearchResults').forEach(element => element.classList.remove('show'));
     }
-}
+  });
+};
 
 window.addEventListener("DOMContentLoaded", gallySearchFormHandler);

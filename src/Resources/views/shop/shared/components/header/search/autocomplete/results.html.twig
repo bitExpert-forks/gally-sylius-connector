@@ -1,8 +1,9 @@
 {% import "@SyliusShop/shared/macro/money.html.twig" as money %}
+{% if categories|length or attributes|length or products|length %}
 <div class="row">
     {% if categories|length or attributes|length %}
         {% if products|length %}
-        <div class="col-md-3 pe-2 border-end">
+        <div class="col-md-3 pe-2">
         {% else %}
         <div class="col-md-12 pe-2">
         {% endif %}
@@ -43,6 +44,8 @@
                     <small>{{ option_label }}</small>
                 </a>
             {% endfor %}
+
+            <hr class="d-lg-none"/>
         {% endif %}
     </div>
 
@@ -51,7 +54,7 @@
     <div class="col-md-12">
     {% endif %}
         {% if products|length %}
-            <div class="row">
+            <div class="row products">
                 <h6 class="mb-3">{{ 'gally_sylius.autocomplete.products_title'|trans() }}</h6>
                 {% for product in products %}
                     {% set product_name = product['name'] %}
@@ -74,4 +77,4 @@
         {% endif %}
     </div>
 </div>
-
+{% endif %}

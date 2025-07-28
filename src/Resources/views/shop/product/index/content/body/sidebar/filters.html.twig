@@ -1,8 +1,11 @@
 {% import '@SyliusShop/shared/buttons.html.twig' as buttons %}
 {% if is_gally_enabled() %}
     {% set products = hookable_metadata.context.products %}
-    <div {{ sylius_test_html_attribute('vertical-filters') }}>
-        <div class="d-flex flex-column">
+    <div {{ sylius_test_html_attribute('vertical-filters') }} class="offcanvas-lg offcanvas-start offcanvas-wide p-0" id="searchFilters">
+        <div class="d-lg-none position-absolute end-0 p-2">
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#searchFilters" aria-label="Close"></button>
+        </div>
+        <div class="d-flex flex-column overflow-auto my-2 my-lg-2 px-4 px-lg-2">
             <form method="get" action="{{ path('sylius_shop_product_index', {'slug': app.request.attributes.get('slug')}) }}">
                 {# Keep the current search in the query on filtering #}
                 {% if products.parameters.get('criteria').search is defined %}

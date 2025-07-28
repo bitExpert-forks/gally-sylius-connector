@@ -80,7 +80,7 @@ class SortOptionComponent
                     $label = \array_key_exists("{$option->getCode()}.$direction", $this->translationKeys)
                         ? $this->translator->trans($this->translationKeys["{$option->getCode()}.$direction"])
                         : $option->getDefaultLabel() . ' ' . $this->translator->trans('gally_sylius.ui.sort.direction.' . $direction);
-                    $sortData['sort_options'][$option->getCode()] = [
+                    $sortData['sort_options'][$option->getCode() . $direction] = [
                         'field' => $option->getCode(),
                         'sorting' => [$option->getCode() => $direction],
                         'label' => $label,

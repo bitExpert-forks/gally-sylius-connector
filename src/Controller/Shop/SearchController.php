@@ -34,7 +34,7 @@ class SearchController extends AbstractController
     ) {
     }
 
-    public function getForm(RequestStack $requestStack): Response
+    public function getForm(Request $renderRequest, RequestStack $requestStack): Response
     {
         /** @var string $query */
         $query = $requestStack->getMainRequest()?->get('query');
@@ -52,7 +52,10 @@ class SearchController extends AbstractController
 
         return $this->render(
             '@GallySyliusPlugin/shop/shared/components/header/search/form.html.twig',
-            ['searchForm' => $searchForm->createView()]
+            [
+                'searchForm' => $searchForm->createView(),
+                'mobileMode' => $renderRequest->get('mobile_mode'),
+            ]
         );
     }
 

@@ -130,7 +130,8 @@ class GallyDynamicFilterType extends AbstractType
         $parameters = new Parameters($queryParameters);
         /** @var array<string, array<string, mixed>> $criteria */
         $criteria = $parameters->get('criteria', []);
-        $search = (isset($criteria['search'], $criteria['search']['value'])) ? $criteria['search']['value'] : '';
+        $query = $parameters->get('query', null);
+        $search = $query ?: ((isset($criteria['search'], $criteria['search']['value'])) ? $criteria['search']['value'] : '');
         unset($criteria['search']);
         /** @var string $slug */
         $slug = $request?->attributes->get('slug') ?? '';
